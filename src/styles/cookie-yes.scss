@@ -1,0 +1,83 @@
+@use "/src/styles/globals" as *;
+
+@keyframes move {
+	0% {
+		transform: translateY(rem(80px));
+	}
+	100% {
+		transform: translateY(0);
+	}
+}
+
+@keyframes fade {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+.cky-consent-container.cky-box-bottom-left {
+	bottom: min(var(--container-spacing-md), rem(32px));
+	left: min(var(--container-spacing-md), rem(32px));
+	width: rem(560px);
+	max-width: calc(100% - min(var(--container-spacing-md), rem(32px)) * 2);
+	transform: translateY(rem(80px));
+	opacity: 0;
+	border-radius: 0;
+	animation: move 0.8s $ease-out-power-4 forwards, fade 0.2s linear forwards;
+
+	.cky-consent-bar {
+		padding: view-clamp(24px, 32px);
+		border: 1px solid color-mix(in srgb, currentColor 10%, transparent) !important;
+		box-shadow: none;
+		background-color: var(--neutral-100);
+		color: var(--on-neutral-100);
+
+		.cky-notice {
+			.cky-title {
+				margin-bottom: rem(12px);
+				padding: 0;
+				color: inherit !important;
+			}
+
+			.cky-notice-group {
+				color: inherit;
+
+				.cky-notice-des {
+					padding: 0;
+					color: inherit !important;
+
+					p {
+						@include typography-style("body-small");
+					}
+
+					.cky-policy {
+						color: inherit !important;
+						@include typography-style("body-small");
+					}
+				}
+
+				.cky-notice-btn-wrapper {
+					gap: rem(8px) rem(32px);
+					margin-top: view-clamp(16px, 24px);
+					padding: view-clamp(16px, 24px) 0 0 0;
+					border-top: 1px solid color-mix(in srgb, currentColor 10%, transparent);
+
+					.cky-btn {
+						display: flex;
+						align-items: center;
+						flex: 0 1 auto;
+						gap: rem(8px);
+						margin: 0;
+						padding: 0;
+						border: none;
+						background-color: transparent !important;
+						color: inherit !important;
+					}
+				}
+			}
+		}
+	}
+}

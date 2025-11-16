@@ -1,0 +1,29 @@
+@use "/src/styles/globals" as *;
+
+@for $start from 1 through $grid-columns {
+	@for $end from 1 through $grid-columns + 1 {
+		.u-gc-#{$start}\/#{$end} {
+			grid-column-start: #{$start};
+			grid-column-end: #{$end};
+		}
+	}
+}
+
+.u-gc-full {
+	grid-column: 1 / -1;
+}
+
+@include responsive-breakpoints using ($breakpoint-name) {
+	@for $start from 1 through $grid-columns {
+		@for $end from 1 through $grid-columns + 1 {
+			.u-gc-#{$start}\/#{$end}#{$breakpoint-separator}#{$breakpoint-name} {
+				grid-column-start: #{$start};
+				grid-column-end: #{$end};
+			}
+		}
+	}
+
+	.u-gc-full#{$breakpoint-separator}#{$breakpoint-name} {
+		grid-column: 1 / -1;
+	}
+}

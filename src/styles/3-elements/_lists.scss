@@ -1,0 +1,28 @@
+@use "/src/styles/globals" as *;
+
+.s-content {
+	ul {
+		margin: rem(16px) 0;
+
+		li {
+			position: relative;
+			padding-left: rem(8px + 4px);
+
+			&::before {
+				content: "";
+				position: absolute;
+				top: 0.55em;
+				left: 0;
+				width: rem(4px);
+				height: rem(4px);
+				transform: translateY(-50%);
+				border-radius: 50%;
+				background-color: currentColor;
+			}
+		}
+	}
+	ol {
+		li {
+		}
+	}
+}

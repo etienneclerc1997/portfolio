@@ -1,0 +1,30 @@
+---
+type Container = string | false | undefined;
+interface Settings {
+	id?: string;
+	classes?: string | string[];
+	backgroundColor?: string;
+	collapse?: boolean;
+	inner?: { classes?: string | string[] };
+	content?: { classes?: string | string[]; container?: Container };
+}
+
+const { settings } = Astro.props as { settings: Settings };
+
+const toArr = (v: unknown) => (Array.isArray(v) ? v : v ? [v as string] : []);
+
+const sectionClasses = [...toArr(settings.classes), settings.backgroundColor && settings.backgroundColor !== "neutral-100" ? `-${settings.backgroundColor}` : null, settings.collapse !== false ? "-collapse" : null].filter(Boolean).join(" ");
+
+const innerClasses = toArr(settings.inner?.classes).join(" ");
+
+const contentContainer = Object.hasOwn(settings.content ?? {}, "container") ? settings.content?.container : "|| o-container";
+const contentClasses = [contentContainer, ...(toArr(settings.content?.classes) || "")].filter(Boolean).join(" ");
+---
+
+<section class={`o-section${sectionClasses ? " " + sectionClasses : ""}`} id={settings.id}>
+	<div class={`o-section_inner${innerClasses ? " " + innerClasses : ""}`}>
+		<div class={`o-section_content${contentClasses ? " " + contentClasses : ""}`}>
+			<slot />
+		</div>
+	</div>
+</section>

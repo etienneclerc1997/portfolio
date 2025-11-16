@@ -1,0 +1,52 @@
+@use "/src/styles/0-settings" as *;
+@use "/src/styles/1-tools/functions" as *;
+@use "/src/styles/1-tools/mixins" as *;
+
+:root {
+	--header-height: #{rem(80px)};
+
+	--plyr-color-main: var(--primary-500);
+
+	--grid-columns: #{$grid-columns};
+	--grid-gutter: #{rem($grid-gutter)};
+
+	@each $size, $section-attributes in $sections {
+		--section-spacing-top-#{$size}: #{view-clamp(map-deep-get($sections, $size, "spacing-top-mobile"), map-deep-get($sections, $size, "spacing-top-desktop"))};
+		--section-spacing-bottom-#{$size}: #{view-clamp(map-deep-get($sections, $size, "spacing-bottom-mobile"), map-deep-get($sections, $size, "spacing-bottom-desktop"))};
+	}
+
+	@each $size, $container-attributes in $containers {
+		--container-spacing-#{$size}: #{view-clamp(map-deep-get($containers, $size, "spacing-mobile"), map-deep-get($containers, $size, "spacing-desktop"))};
+	}
+
+	@each $theme, $palette in $palettes {
+		@include conditional-wrap($theme != "t-default", "&.#{$theme}, .#{$theme}") {
+			@each $token, $variants in $palette {
+				@each $tone, $colors in $variants {
+					@each $type, $value in $colors {
+						@if ($type == "background") {
+							--#{$token}-#{$tone}: #{map-deep-get($palettes, $theme, $token, $tone, "background")};
+							--#{$token}-#{$tone}-rgb: #{to-rgb(map-deep-get($palettes, $theme, $token, $tone, "background"))};
+						} @else if ($type == "foreground") {
+							--on-#{$token}-#{$tone}: #{map-deep-get($palettes, $theme, $token, $tone, "foreground")};
+							--on-#{$token}-#{$tone}-rgb: #{to-rgb(map-deep-get($palettes, $theme, $token, $tone, "foreground"))};
+						} @else if ($type == "foreground-alt") {
+							--on-#{$token}-#{$tone}-alt: #{map-deep-get($palettes, $theme, $token, $tone, "foreground-alt")};
+							--on-#{$token}-#{$tone}-alt-rgb: #{to-rgb(map-deep-get($palettes, $theme, $token, $tone, "foreground-alt"))};
+						}
+					}
+				}
+			}
+		}
+	}
+
+	@media (max-width: $from-tablet) {
+		--grid-columns: #{$grid-columns-tablet};
+		--grid-gutter: #{rem($grid-gutter-tablet)};
+	}
+
+	@media (max-width: $from-mobile-l) {
+		--grid-columns: #{$grid-columns-mobile};
+		--grid-gutter: #{rem($grid-gutter-mobile)};
+	}
+}

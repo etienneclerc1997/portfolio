@@ -1,0 +1,22 @@
+@use "/src/styles/globals" as *;
+
+.o-container {
+	@include container;
+
+	@each $size, $container-attributes in $containers {
+		@if ($size != "md") {
+			&.-#{$size} {
+				@include container($size, $include-base: false);
+			}
+		}
+	}
+
+	&.-fullbleed {
+		padding-right: 0;
+		padding-left: 0;
+	}
+
+	&.-uncontained {
+		max-width: none;
+	}
+}

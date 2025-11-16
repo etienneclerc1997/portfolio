@@ -1,0 +1,80 @@
+@use "/src/styles/globals" as *;
+
+// Add your desired gutters like this:
+//
+// $grid-gutter-sizes: (
+// 	"-none": 0px,
+// 	"-200": $spacing-unit-200,
+// );
+
+$grid-gutter-sizes: ();
+
+.o-grid {
+	display: grid;
+	grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
+	column-gap: var(--grid-gutter);
+
+	@for $i from 1 through $grid-columns {
+		&.-cols-#{$i} {
+			grid-template-columns: repeat(#{$i}, minmax(0, 1fr));
+		}
+
+		&.-rows-#{$i} {
+			grid-template-rows: repeat(#{$i}, minmax(0, 1fr));
+		}
+	}
+
+	@include responsive-breakpoints using ($breakpoint-name) {
+		@for $i from 1 through $grid-columns {
+			&.-cols-#{$i}#{$breakpoint-separator}#{$breakpoint-name} {
+				grid-template-columns: repeat(#{$i}, minmax(0, 1fr));
+			}
+
+			&.-rows-#{$i}#{$breakpoint-separator}#{$breakpoint-name} {
+				grid-template-rows: repeat(#{$i}, minmax(0, 1fr));
+			}
+		}
+
+		&.-cols-global#{$breakpoint-separator}#{$breakpoint-name} {
+			grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
+		}
+	}
+
+	@each $suffix, $gutter-size in $grid-gutter-sizes {
+		&.-gutters#{$suffix} {
+			gap: rem($gutter-size);
+		}
+
+		&.-gutters-y#{$suffix} {
+			row-gap: rem($gutter-size);
+		}
+
+		&.-gutters-x#{$suffix} {
+			column-gap: rem($gutter-size);
+		}
+	}
+
+	@include responsive-breakpoints using ($breakpoint-name) {
+		@each $suffix, $gutter-size in $grid-gutter-sizes {
+			&.-gutters#{$suffix}#{$breakpoint-separator}#{$breakpoint-name} {
+				gap: rem($gutter-size);
+			}
+
+			&.-gutters-y#{$suffix}#{$breakpoint-separator}#{$breakpoint-name} {
+				row-gap: rem($gutter-size);
+			}
+
+			&.-gutters-x#{$suffix}#{$breakpoint-separator}#{$breakpoint-name} {
+				column-gap: rem($gutter-size);
+			}
+
+			&.-gutters-global#{$breakpoint-separator}#{$breakpoint-name} {
+				column-gap: var(--grid-gutter);
+			}
+		}
+	}
+
+	&.-gutters-y-global {
+		row-gap: var(--grid-gutter);
+	}
+}

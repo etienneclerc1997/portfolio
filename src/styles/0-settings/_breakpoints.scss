@@ -1,0 +1,30 @@
+$from-desktop-l: 2560px;
+$from-desktop: 1920px;
+$from-laptop-l: 1440px;
+$from-laptop-m: 1200px;
+$from-laptop: 1000px;
+$from-tablet: 700px;
+$from-mobile-l: 425px;
+$from-mobile-m: 375px;
+
+$to-desktop: $from-desktop + 1; //1921px
+$to-laptop-l: $from-laptop-l + 1; //1441px
+$to-laptop-m: $from-laptop-m + 1; //1201px
+$to-laptop: $from-laptop + 1; //1001px
+$to-tablet: $from-tablet + 1; //701px
+$to-mobile-l: $from-mobile-l + 1; //426px
+$to-mobile-m: $from-mobile-m + 1; //376px
+
+// Core media query breakpoints used for generating responsive classes
+$responsive-breakpoints: (
+	laptop-l: $from-laptop-l,
+	laptop: $from-laptop,
+	tablet: $from-tablet,
+	mobile: $from-mobile-l,
+);
+
+// This defines the separator for the breakpoints suffix
+// in the class name. By default, we are generating the responsive suffixes
+// for the classes with a '@' symbol so you get classes like:
+// <div class="u-3/12@mobile">
+$breakpoint-separator: \@;

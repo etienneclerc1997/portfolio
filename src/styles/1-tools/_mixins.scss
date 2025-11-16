@@ -1,0 +1,230 @@
+@use "sass:math";
+@use "sass:meta";
+@use "sass:string";
+
+@use "/src/styles/0-settings" as *;
+@use "/src/styles/1-tools/functions" as *;
+@use "/src/styles/spritemap" as *;
+
+/// Applies typography styles for a given style key.
+///
+/// @param {string} $typography-style - The key for the desired typography style.
+/// @param {bool} $include-content-scope-styling [true] - Whether to include content scope styling (opacity, margins).
+@mixin typography-style($typography-style, $include-content-scope-styling: true) {
+	$font-family: map-deep-get($typography-styles, $typography-style, "font-family");
+	$font-weight: map-deep-get($typography-styles, $typography-style, "font-weight");
+	$font-variation-settings: map-deep-get($typography-styles, $typography-style, "font-variation-settings");
+	$font-size: map-deep-get($typography-styles, $typography-style, "font-size");
+	$min-font-size: map-deep-get($typography-styles, $typography-style, "min-font-size");
+	$line-height: map-deep-get($typography-styles, $typography-style, "line-height");
+	$text-transform: map-deep-get($typography-styles, $typography-style, "text-transform");
+	$letter-spacing: map-deep-get($typography-styles, $typography-style, "letter-spacing");
+	$opacity: map-deep-get($typography-styles, $typography-style, "opacity");
+	$margin-top: map-deep-get($typography-styles, $typography-style, "margin-top");
+	$margin-bottom: map-deep-get($typography-styles, $typography-style, "margin-bottom");
+
+	text-transform: $text-transform;
+	font-family: string.unquote($font-family);
+	font-weight: $font-weight;
+	letter-spacing: $letter-spacing;
+
+	@if ($font-variation-settings) {
+		font-variation-settings: string.unquote($font-variation-settings);
+	}
+
+	@if ($min-font-size) {
+		font-size: view-clamp($min-font-size, $font-size);
+	} @else if ($font-size) {
+		font-size: rem($font-size);
+	} @else {
+		@error "#{$typography-style} doesn't exist.";
+	}
+
+	@if (math.unit($font-size) != "px") {
+		@error "Desktop font size must use 'px' units.";
+	}
+	@if ($min-font-size and math.unit($min-font-size) != "px") {
+		@error "Minimum font size must use 'px' units.";
+	}
+
+	@if (math.unit($line-height) == "px") {
+		line-height: math.div($line-height, $font-size);
+	} @else if(math.unit($line-height) == "") {
+		line-height: $line-height;
+	} @else {
+		@error "Line height must be unitless or use 'px' units.";
+	}
+
+	@if ($include-content-scope-styling) {
+		.s-content & {
+			@if ($opacity) {
+				opacity: $opacity;
+			}
+			@if ($margin-top or $margin-bottom) {
+				@if ($margin-top) {
+					@if (math.unit($margin-top) == "em") {
+						margin-top: $margin-top;
+					} @else if(math.unit($margin-top) == "px") {
+						margin-top: #{math.div($margin-top, $font-size) + "em"};
+					} @else {
+						@error "Margins must use 'em' or 'px' units.";
+					}
+				}
+				@if ($margin-bottom) {
+					@if (math.unit($margin-bottom) == "em") {
+						margin-bottom: $margin-bottom;
+					} @else if(math.unit($margin-bottom) == "px") {
+						margin-bottom: #{math.div($margin-bottom, $font-size) + "em"};
+					} @else {
+						@error "Margins must use 'em' or 'px' units.";
+					}
+				}
+			}
+		}
+	}
+}
+
+/// Generates a container with a specified size.
+///
+/// @param {string} $size ["md"] - The container size key.
+/// @param {bool} $include-base [true] - Whether to include base container styling (width, margin).
+@mixin container($size: "md", $include-base: true) {
+	max-width: rem(map-deep-get($containers, $size, "max-width"));
+	padding-right: var(--container-spacing-#{$size});
+	padding-left: var(--container-spacing-#{$size});
+
+	@if $include-base {
+		width: 100%;
+		margin-right: auto;
+		margin-left: auto;
+	}
+}
+
+/// Iterates through all responsive breakpoints and applies content within each media query.
+///
+/// @content - Content to apply for each breakpoint.
+@mixin responsive-breakpoints {
+	@if (meta.variable-exists(responsive-breakpoints)) {
+		@each $breakpoint-name, $breakpoint-value in $responsive-breakpoints {
+			@media (max-width: #{$breakpoint-value}) {
+				@content ($breakpoint-name);
+			}
+		}
+	}
+}
+
+/// Generates an icon using a sprite and applies sizing and color.
+///
+/// @param {string} $name [""] - Icon name (matches sprite filename).
+/// @param {number} $size [$spacing-unit-300] - Icon size.
+/// @param {string} $color [currentColor] - Icon color.
+/// @param {bool} $include-base [true] - Whether to include base icon styling.
+@mixin icon($name: "", $size: $spacing-unit-300, $color: currentColor, $include-base: true) {
+	@if ($include-base) {
+		display: inline-block;
+		width: rem($size);
+		height: rem($size);
+		background-color: $color;
+		vertical-align: middle;
+	}
+
+	@if (map-deep-get($sprites, $name, "uri")) {
+		mask-image: url(map-deep-get($sprites, $name, "uri"));
+		mask-repeat: no-repeat;
+		mask-size: contain;
+		mask-position: center;
+	}
+}
+
+/// Generates section spacing and overflow for a given section size.
+///
+/// @param {string} $size ["default"] - Section size key.
+@mixin section($size: "default") {
+	padding-top: var(--section-spacing-top-#{$size});
+	padding-bottom: var(--section-spacing-bottom-#{$size});
+	overflow: clip;
+}
+
+/// Makes an absolutely positioned element fill its parent.
+/// Optionally sets object-fit property.
+///
+/// @param {string} $object-fit [""] - Object fit value ("cover" or "contain").
+@mixin absolute-fill($object-fit: "") {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+
+	@if $object-fit== "cover" {
+		object-fit: cover;
+	} @else if $object-fit== "contain" {
+		object-fit: contain;
+	}
+}
+
+/// Adds a selector to the root element for variant styling.
+///
+/// @param {string} $selector - Selector to add at root.
+/// @content - Content to apply inside the variant.
+@mixin variant($selector) {
+	@at-root #{$selector}#{&} {
+		@content;
+	}
+}
+
+/// Hides an element visually but keeps it accessible to screen readers.
+///
+/// @link https://a11y-guidelines.orange.com/en/web/components-examples/accessible-hiding/
+@mixin accessibility-hidden {
+	position: absolute;
+	left: 0;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	padding: 0;
+	border: 0;
+	overflow: hidden;
+	white-space: nowrap;
+	clip: rect(0, 0, 0, 0);
+}
+
+/// Prevents text wrapping and adds ellipsis for overflow.
+///
+/// @param {number|string} $width [100%] - Maximum width for truncation.
+@mixin truncate($width: 100%) {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+
+	@if $width {
+		max-width: $width; // [1]
+	}
+}
+
+/// Applies content only for touch or stylus devices using media queries.
+///
+/// @content - Content to apply for touch devices.
+@mixin is-touch {
+	@media (hover: none) and (pointer: coarse) {
+		@content;
+	}
+
+	@media (hover: none) and (pointer: fine) {
+		@content;
+	}
+}
+
+/// Conditionally wraps content in a selector if condition is true.
+///
+/// @param {bool} $condition - Condition to check.
+/// @param {string} $selector - Selector to wrap content in if condition is true.
+/// @content - Content to conditionally wrap.
+@mixin conditional-wrap($condition, $selector) {
+	@if $condition {
+		#{$selector} {
+			@content;
+		}
+	} @else {
+		@content;
+	}
+}

@@ -1,0 +1,9 @@
+@use "/src/styles/globals" as *;
+
+.u-truncate {
+	@include truncate;
+}
+
+.u-accessibility-hidden {
+	@include accessibility-hidden;
+}

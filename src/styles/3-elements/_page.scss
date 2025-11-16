@@ -1,0 +1,44 @@
+@use "/src/styles/globals" as *;
+
+::selection {
+	background-color: var(--secondary-500);
+	color: var(--on-secondary-500);
+	text-shadow: none;
+}
+
+html {
+	min-height: 100%;
+	font-size: $global-font-size * (1 + $scale-factor * 2);
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	scroll-margin-top: var(--header-height);
+
+	@media (max-width: $from-desktop) and (min-width: $to-laptop-l) {
+		font-size: $global-font-size * (1 + $scale-factor);
+	}
+
+	@media (max-width: $from-laptop-l) {
+		font-size: $global-font-size;
+	}
+
+	&.is-changing {
+		cursor: wait;
+
+		* {
+			cursor: wait;
+		}
+	}
+}
+
+body {
+	--current-background-color: var(--neutral-100);
+	--current-color: var(--on-neutral-100);
+	background-color: var(--current-background-color);
+	color: var(--current-color);
+	overflow: clip;
+	text-wrap: pretty;
+	@include typography-style("body-medium");
+}
+
+main {
+}

@@ -1,0 +1,6 @@
+@use "/src/styles/3-elements" as *;
+
+html body.mce-content-body {
+	padding: 40px 80px !important;
+	@extend .s-content;
+}

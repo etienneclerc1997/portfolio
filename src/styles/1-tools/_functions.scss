@@ -1,0 +1,130 @@
+@use "sass:math";
+@use "sass:meta";
+@use "sass:list";
+@use "sass:color";
+@use "sass:map";
+
+@use "/src/styles/0-settings" as *;
+
+/// Converts a pixel value to its REM equivalent based on a base font size.
+///
+/// @param {number} $size - Pixel value to convert (must be in px).
+/// @param {number} $base [$global-font-size] - Base font size in px.
+/// @return {number} - REM value.
+@function rem($size, $base: $global-font-size) {
+	@if (meta.type-of($size) == number) {
+		@if (math.unit($size) != "px") {
+			@error "'#{$size}' needs to be a pixel value.";
+		}
+	} @else {
+		@error "'#{$size}' needs to be a number.";
+	}
+
+	@if (meta.type-of($base) == number) {
+		@if (math.unit($base) != "px") {
+			@error "'#{$base}' needs to be a pixel value.";
+		}
+	} @else {
+		@error "'#{$base}' needs to be a number.";
+	}
+
+	@return math.div($size, $base) * 1rem;
+}
+
+/// Retrieves a deeply nested value from a map using a list of keys.
+/// Can also be used as a regular map.get function.
+///
+/// @param {map} $map - Map to search.
+/// @param {...*} $keys - List of keys to traverse.
+/// @return {*} - Value found or null.
+@function map-deep-get($map, $keys...) {
+	$scope: $map;
+	$i: 1;
+
+	@if (meta.type-of($scope) == map and $i <= list.length($keys)) {
+		@while (meta.type-of($scope) == map and $i <= list.length($keys)) {
+			$key: list.nth($keys, $i);
+			$scope: map.get($scope, $key);
+
+			$i: $i + 1;
+
+			// Break out of the loop if the current scope becomes null
+			@if $scope == null {
+				@return null;
+			}
+		}
+	} @else {
+		@return null;
+	}
+
+	@return $scope;
+}
+
+/// Calculates the fullbleed offset for a specified container size.
+///
+/// @param {string} $size ["md"] - Container size key.
+/// @return {calc} - CSS calc() expression for offset.
+@function container-offset($size: "md") {
+	@return min(-1 * ((100vw - #{rem(map-deep-get($containers, $size, "max-width"))}) / 2 + var(--container-spacing-#{$size})), var(--container-spacing-#{$size}) * -1);
+}
+
+/// Converts a hex color to comma-separated RGB values.
+///
+/// @param {string} $hex - Hex color code.
+/// @return {list} - Comma-separated RGB values.
+@function to-rgb($hex) {
+	@return color.channel($hex, "red", $space: rgb), color.channel($hex, "green", $space: rgb), color.channel($hex, "blue", $space: rgb);
+}
+
+/// Removes the unit from a number, returning a unitless value.
+///
+/// @param {number} $value - Number to strip unit from.
+/// @return {number} - Unitless value.
+@function strip-unit($value) {
+	@if meta.type-of($value) != "number" {
+		@error "Invalid `#{meta.type-of($value)}` type. Choose a number type instead.";
+	} @else if meta.type-of($value) == "number" {
+		@return math.div($value, $value * 0 + 1);
+	}
+
+	@return $value;
+}
+
+/// Returns a CSS clamp() expression for a responsive value between min and max sizes.
+/// Useful for fluid typography and spacing.
+///
+/// @param {number} $min-size - Minimum value in px.
+/// @param {number} $max-size [$min-size] - Maximum value in px.
+/// @param {number} $min-width [$from-mobile-m] - Minimum viewport width in px.
+/// @param {number} $max-width [$from-laptop-l] - Maximum viewport width in px.
+/// @return {string} - CSS clamp() expression.
+@function view-clamp($min-size, $max-size: $min-size, $min-width: $from-mobile-m, $max-width: $from-laptop-l) {
+	$max-size: math.div($max-size, $global-font-size);
+
+	$max-width: math.div($max-width, $global-font-size);
+	$min-width: math.div($min-width, $global-font-size);
+
+	$slope: math.div(($max-size - math.div($min-size, $global-font-size)), ($max-width - $min-width));
+	$y-axis-intersection: -$min-width * $slope + math.div($min-size, $global-font-size);
+
+	$max-size: calc(#{strip-unit($max-size)} * 1rem);
+
+	@return clamp(#{$min-size}, #{rem($y-axis-intersection * $global-font-size)} + #{$slope * 100vw}, #{$max-size});
+}
+
+/// Calculates the total width of a given number of grid columns, including gutters and container padding.
+///
+/// @param {number} $nbr-cols - Number of columns to span.
+/// @param {number} $container [0px] - Container padding (both sides).
+/// @param {number} $grid-cols [var(--grid-columns)] - Total columns in grid.
+/// @param {number} $offset [0px] - Additional offset to add.
+/// @param {string} $base-width [100%] - Base width for calculation.
+/// @return {string} - CSS calc() expression for total width.
+@function grid-space($nbr-cols, $container: 0px, $grid-cols: var(--grid-columns), $offset: 0px, $base-width: 100%) {
+	$total-width: calc($base-width + $offset);
+	$container-spacing: calc($container * 2);
+	$gutter-width: calc(($grid-cols - 1) * var(--grid-gutter));
+	$column-width: calc(($total-width - $container-spacing - $gutter-width) / $grid-cols);
+
+	@return calc($column-width * $nbr-cols + var(--grid-gutter) * ($nbr-cols - 1));
+}

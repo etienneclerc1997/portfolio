@@ -1,0 +1,53 @@
+@use "/src/styles/globals" as *;
+@use "/src/styles/spritemap" as *;
+
+//
+// Gets all the icons from spritemap.scss and implements them as mask-image.
+//
+// Vite generates 2 files:
+//
+// -> dist/assets/spritemap.svg
+// Contains all the svgs from the assets/src/icons folder and names them from their filename.
+//
+// -> assets/src/scss/spritemap.scss
+// Contains variables to access the icons data (names, paths, etc.).
+//
+// To add an icon, simply add your SVG in the assets/src/icons folder and run vite to generate the updated files.
+// Your icon will now be available and named from its original file name.
+
+$icon-sizes: (
+	"s200": $spacing-unit-200,
+);
+
+$icon-colors: ("primary-500");
+
+.o-icon {
+	display: inline-flex;
+	vertical-align: middle;
+
+	@each $name, $value in $sprites {
+		&.-#{$name} {
+			&::after {
+				content: "";
+				@include icon($name: $name);
+			}
+		}
+	}
+
+	@each $size-namespace, $size in $icon-sizes {
+		&.-#{$size-namespace} {
+			&::after {
+				width: rem($size);
+				height: rem($size);
+			}
+		}
+	}
+
+	@each $icon-color in $icon-colors {
+		&.-#{$icon-color} {
+			&::after {
+				background-color: var(--#{$icon-color});
+			}
+		}
+	}
+}

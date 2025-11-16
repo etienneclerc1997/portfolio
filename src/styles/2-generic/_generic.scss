@@ -1,0 +1,96 @@
+@use "/src/styles/globals" as *;
+
+html {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+}
+
+*,
+:before,
+:after {
+	box-sizing: inherit;
+}
+
+address {
+	font-style: inherit;
+}
+
+dfn,
+cite,
+em,
+i {
+	font-style: italic;
+}
+
+b,
+strong {
+	font-weight: $bold;
+}
+
+a {
+	text-decoration: none;
+
+	svg {
+		pointer-events: none;
+	}
+}
+
+ul,
+ol {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+p,
+figure {
+	margin: 0;
+	padding: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	margin: 0;
+}
+
+// 1. Single taps should be dispatched immediately on clickable elements
+a,
+area,
+button,
+input,
+label,
+select,
+textarea,
+[tabindex] {
+	-ms-touch-action: manipulation; /* [1] */
+	touch-action: manipulation;
+}
+
+[hreflang] > abbr[title] {
+	text-decoration: none;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+hr {
+	display: block;
+	height: 1px;
+	margin: 1em 0;
+	padding: 0;
+	border: 0;
+	border-top: 1px solid #cccccc;
+}
+
+.grecaptcha-badge {
+	visibility: hidden;
+}

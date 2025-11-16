@@ -1,0 +1,9 @@
+@use "/src/styles/globals" as *;
+
+.o-typography {
+	@each $typography-style, $typography-attributes in $typography-styles {
+		&.-#{$typography-style} {
+			@include typography-style($typography-style);
+		}
+	}
+}

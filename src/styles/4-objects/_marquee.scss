@@ -1,0 +1,13 @@
+.o-marquee {
+	overflow: hidden;
+}
+
+.o-marquee_wrapper {
+	display: inline-flex;
+	will-change: transform;
+}
+
+.o-marquee_content {
+	flex-shrink: 0;
+	white-space: nowrap;
+}

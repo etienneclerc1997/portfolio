@@ -1,0 +1,57 @@
+@use "/src/styles/globals" as *;
+
+$negative-selector: "";
+
+@each $section-color in $section-colors {
+	$negative-selector-copy: $negative-selector;
+	$negative-selector: "#{$negative-selector-copy}:not(.-#{$section-color})";
+}
+
+.o-section {
+	@include section;
+
+	@each $size, $section-attributes in $sections {
+		@if ($size != "default") {
+			&.-#{$size} {
+				@include section($size);
+			}
+		}
+	}
+
+	@each $section-color in $section-colors {
+		&.-#{$section-color} {
+			--current-background-color-rgb: var(--#{$section-color}-rgb);
+			--current-background-color: var(--#{$section-color});
+			--current-color: var(--on-#{$section-color});
+			background-color: var(--current-background-color);
+			color: var(--current-color);
+
+			&.-collapse + .o-section.-#{$section-color}.-collapse {
+				padding-top: 0;
+			}
+		}
+	}
+
+	&.-no-spacing {
+		padding-top: 0;
+		padding-bottom: 0;
+	}
+
+	&.-no-spacing-top {
+		padding-top: 0;
+	}
+
+	&.-no-spacing-bottom {
+		padding-bottom: 0;
+	}
+
+	&.-collapse#{$negative-selector} {
+		& + .o-section.-collapse#{$negative-selector} {
+			padding-top: 0;
+		}
+	}
+
+	&.-overflow-visible {
+		overflow: visible;
+	}
+}

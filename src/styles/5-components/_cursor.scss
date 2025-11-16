@@ -1,0 +1,57 @@
+@use "/src/styles/globals" as *;
+
+.c-cursor {
+	position: fixed;
+	top: 0;
+	left: 0;
+	display: flex;
+
+	gap: rem(8px);
+	height: rem(24px);
+	padding: rem(2px) rem(8px) rem(2px) rem(2px);
+	background-color: var(--primary-500);
+	color: var(--on-primary-500);
+}
+
+.c-cursor_avatar {
+	height: 100%;
+	background-color: var(--on-primary-500);
+	color: var(--primary-500);
+	aspect-ratio: 1;
+}
+
+.c-cursor_console {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	max-width: min(50ch, 75vw);
+	padding-left: 0.75em;
+	overflow: hidden;
+	white-space: nowrap;
+	@include typography-style("label-small");
+
+	&::before {
+		content: ">";
+		position: absolute;
+		top: 50%;
+		left: 0;
+		width: 0.75em;
+		transform: translateY(-50%);
+		background-color: var(--primary-500);
+	}
+}
+
+.c-cursor_text {
+	margin-top: 0.1em;
+	// display: flex;
+	// align-items: center;
+
+	// &::after {
+	// 	content: "";
+	// 	display: inline-block;
+	// 	width: 1px;
+	// 	height: 100%;
+	// 	background-color: currentColor;
+	// }
+}

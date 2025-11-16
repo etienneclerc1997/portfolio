@@ -1,0 +1,93 @@
+@use "/src/styles/globals" as *;
+
+// Add your desired gutters like this:
+//
+// $layout-gutter-sizes: (
+// 	"-none": 0px,
+// 	"-200": $spacing-unit-200,
+// );
+
+$layout-gutter-sizes: ();
+
+.o-layout {
+	display: flex;
+	flex-wrap: wrap;
+
+	@each $suffix, $gutter-size in $layout-gutter-sizes {
+		&.-gutters-x#{$suffix} {
+			column-gap: rem($gutter-size);
+		}
+
+		&.-gutters-y#{$suffix} {
+			row-gap: rem($gutter-size);
+		}
+	}
+
+	@include responsive-breakpoints using ($breakpoint-name) {
+		@each $suffix, $gutter-size in $layout-gutter-sizes {
+			&.-gutters-x#{$suffix}#{$breakpoint-separator}#{$breakpoint-name} {
+				column-gap: rem($gutter-size);
+			}
+
+			&.-gutters-y#{$suffix}#{$breakpoint-separator}#{$breakpoint-name} {
+				row-gap: rem($gutter-size);
+			}
+		}
+
+		&.-gutters-x-global#{$breakpoint-separator}#{$breakpoint-name} {
+			column-gap: var(--grid-gutter);
+		}
+
+		&.-gutters-y-global#{$breakpoint-separator}#{$breakpoint-name} {
+			row-gap: var(--grid-gutter);
+		}
+
+		&.-col#{$breakpoint-separator}#{$breakpoint-name} {
+			flex-direction: column;
+		}
+
+		&.-col-reverse#{$breakpoint-separator}#{$breakpoint-name} {
+			flex-direction: column-reverse;
+		}
+
+		&.-row#{$breakpoint-separator}#{$breakpoint-name} {
+			flex-direction: row;
+		}
+
+		&.-row-reverse#{$breakpoint-separator}#{$breakpoint-name} {
+			flex-direction: row-reverse;
+		}
+
+		&.-nowrap#{$breakpoint-separator}#{$breakpoint-name} {
+			flex-wrap: nowrap;
+		}
+	}
+
+	&.-gutters-x-global {
+		column-gap: var(--grid-gutter);
+	}
+
+	&.-gutters-y-global {
+		row-gap: var(--grid-gutter);
+	}
+
+	&.-col {
+		flex-direction: column;
+	}
+
+	&.-col-reverse {
+		flex-direction: column-reverse;
+	}
+
+	&.-row {
+		flex-direction: row;
+	}
+
+	&.-row-reverse {
+		flex-direction: row-reverse;
+	}
+
+	&.-nowrap {
+		flex-wrap: nowrap;
+	}
+}

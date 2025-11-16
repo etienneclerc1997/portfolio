@@ -1,0 +1,50 @@
+@use "/src/styles/0-settings" as *;
+
+.dev-utils {
+	position: fixed;
+	inset: 0;
+	visibility: hidden;
+	pointer-events: none;
+	z-index: 100;
+	mix-blend-mode: difference;
+}
+
+.dev-center-line {
+	position: fixed;
+	top: 0;
+	left: 50%;
+	width: 1px;
+	height: 100%;
+	transform: translateX(-50%);
+	opacity: 0.25;
+	background-color: #fff;
+}
+
+.dev-grid {
+	position: fixed;
+	inset: 0;
+	display: grid;
+	gap: var(--grid-gutter);
+	grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
+}
+
+.dev-grid_col {
+	opacity: 0.05;
+	background-color: #fff;
+
+	&:nth-child(1n + #{$grid-columns + 1}) {
+		display: none;
+	}
+
+	&:nth-child(1n + #{$grid-columns-tablet + 1}) {
+		@media (max-width: $from-tablet) {
+			display: none;
+		}
+	}
+
+	&:nth-child(1n + #{$grid-columns-mobile + 1}) {
+		@media (max-width: $from-mobile-l) {
+			display: none;
+		}
+	}
+}

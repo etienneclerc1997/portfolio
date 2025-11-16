@@ -1,0 +1,114 @@
+// Weights
+$thin: 100;
+$extra-light: 200;
+$light: 300;
+$normal: 400;
+$medium: 500;
+$semi-bold: 600;
+$bold: 700;
+$extra-bold: 800;
+$black: 900;
+
+// Global font family
+$global-font-family: "PPMori";
+$alt-font-family: "PPMondwest";
+
+// Typography styles
+//
+// These typography style are going to:
+// - Get applied to their respective elements: h1, h2, etc.
+// - Generate the following classes: o-typography -display-large, o-typography -display-medium, etc.
+//
+// Available parameters
+// font-family
+// font-weight
+// font-size
+// min-font-size
+// line-height
+// text-transform
+// letter-spacing
+// font-variation-setting
+// opacity *
+// margin-top *
+// margin-bottom *
+//
+// * Margins and opacity are only applied when inside the scope of s-content
+$typography-styles: (
+	"display-large": (
+		"font-family": $alt-font-family,
+		"font-weight": $normal,
+		"font-size": 200px,
+		"min-font-size": 200px,
+		"line-height": 1.07,
+		"text-transform": none,
+		"letter-spacing": 0em,
+		"margin-top": 0px,
+		"margin-bottom": 0px,
+	),
+	"headline-large": (
+		"font-family": $global-font-family,
+		"font-weight": $normal,
+		"font-size": 40px,
+		"min-font-size": 40px,
+		"line-height": 1.07,
+		"text-transform": none,
+		"letter-spacing": 0em,
+		"margin-top": 0px,
+		"margin-bottom": 0px,
+	),
+	"headline-medium": (
+		"font-family": $global-font-family,
+		"font-weight": $normal,
+		"font-size": 24px,
+		"min-font-size": 24px,
+		"line-height": 1.07,
+		"text-transform": none,
+		"letter-spacing": 0em,
+		"margin-top": 0px,
+		"margin-bottom": 0px,
+	),
+	"label-medium": (
+		"font-family": $alt-font-family,
+		"font-weight": $normal,
+		"font-size": 16px,
+		"min-font-size": 16px,
+		"line-height": 1.07,
+		"text-transform": none,
+		"letter-spacing": 0em,
+		"margin-top": 0px,
+		"margin-bottom": 0px,
+	),
+	"label-small": (
+		"font-family": $alt-font-family,
+		"font-weight": $normal,
+		"font-size": 14px,
+		"min-font-size": 14px,
+		"line-height": 1.07,
+		"text-transform": none,
+		"letter-spacing": 0em,
+		"margin-top": 0px,
+		"margin-bottom": 0px,
+	),
+	"body-medium": (
+		"font-family": $global-font-family,
+		"font-weight": $normal,
+		"font-size": 16px,
+		"min-font-size": 16px,
+		"line-height": 1.07,
+		"text-transform": none,
+		"letter-spacing": 0em,
+		"margin-top": 0px,
+		"margin-bottom": 0px,
+	),
+	"body-small": (
+		"font-family": $global-font-family,
+		"font-weight": $normal,
+		"font-size": 14px,
+		"min-font-size": 14px,
+		"line-height": 1.07,
+		"text-transform": none,
+		"letter-spacing": 0em,
+		"margin-top": 0px,
+		"margin-bottom": 0px,
+	),
+);
